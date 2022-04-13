@@ -14,11 +14,15 @@ namespace ComidaEmCasa.Controllers
         {
             _usuarioService = usuarioService;
         }
+
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             var x = await _usuarioService.List();
-            return Ok(x);
+            if (x.Success)
+                return Ok(x.Value);
+            else
+                return UnprocessableEntity(x.ExCode.ToErrorObj());
         }
     }
 }

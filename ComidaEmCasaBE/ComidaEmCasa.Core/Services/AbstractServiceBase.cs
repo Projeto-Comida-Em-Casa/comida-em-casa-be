@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using ComidaEmCasa.Core.Exceptions;
 using ComidaEmCasa.Core.Repository.Interface;
+using ComidaEmCasa.Core.Results;
 using ComidaEmCasa.Core.Services.Interface;
 using ComidaEmCasa.Model.Info;
 using System.Collections.Generic;
@@ -26,35 +28,33 @@ namespace ComidaEmCasa.Core.Services
             await _repository.Delete(info);
         }
 
-        public virtual Task<TInfo> Get(int id)
+        public virtual async Task<ResultContent<TInfo>> Get(int id)
         {
-            return _repository.Get(id);
+            return Result.Success(await _repository.Get(id));
         }
 
-        public async virtual Task<int> Insert(DTO dto)
+        public async virtual Task<ResultContent<int>> Insert(DTO dto)
         {
             TInfo info = _mapper.Map<TInfo>(dto);
             if (info.Id != 0 && await _repository.Get(info.Id) != null)
-                throw new System.Exception("Already Exists");
-            return await _repository.Insert(info);
+                return Result.Error<int>(ExceptionTags.ENTITY_NOT_FOUND);
+            return Result.Success(await _repository.Insert(info));
         }
 
-        public async Task<List<DTO>> List()
+        public async Task<ResultContent<List<DTO>>> List()
         {
-            return _mapper.Map<List<DTO>>(await _repository.List());
+            return Result.Success(_mapper.Map<List<DTO>>(await _repository.List()));
         }
 
-        public async virtual Task<TInfo> Update(int id, DTO dto)
+        public async virtual Task<ResultContent<TInfo>> Update(int id, DTO dto)
         {
             TInfo info = await _repository.Get(id);
             if (info is null)
-            {
-                throw new System.Exception("Not found");
-            }
+                return Result.Error<TInfo>(ExceptionTags.ENTITY_NOT_FOUND);
             TInfo dtoMap = _mapper.Map<TInfo>(dto);
             info = _mapper.Map(dto, info);
             await _repository.Update(info);
-            return info;
+            return Result.Success(info);
         }
 
         public async Task Update(TInfo entity)
