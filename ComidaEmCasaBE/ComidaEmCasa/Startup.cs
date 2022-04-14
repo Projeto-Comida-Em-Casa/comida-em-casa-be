@@ -1,17 +1,21 @@
 using AutoMapper;
 using ComidaEmCasa.Core.Data;
+using ComidaEmCasa.Core.Helpers;
 using ComidaEmCasa.Core.Mapper.MapperProfile;
 using ComidaEmCasa.Core.Repository;
 using ComidaEmCasa.Core.Repository.Interface;
 using ComidaEmCasa.Core.Services;
 using ComidaEmCasa.Core.Services.Interface;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Text;
 
 namespace ComidaEmCasa
 {
@@ -33,6 +37,11 @@ namespace ComidaEmCasa
                 options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            });
 
             services.AddHttpContextAccessor();
             var profile = new DefaultProfile();
@@ -41,7 +50,7 @@ namespace ComidaEmCasa
             services.AddSingleton(mapper);
             services.AddScoped<DbContext, ComidaEmCasaContext>();
             RegisterRepository(services);
-            RegisterService(services);            
+            RegisterService(services);
             var serverVersion = new MySqlServerVersion(new Version(8, 0, 28));
             services.AddDbContextPool<ComidaEmCasaContext>(options =>
             options.UseMySql(Configuration.GetConnectionString(ProjectVariables.ConnectionString), serverVersion));
@@ -51,6 +60,26 @@ namespace ComidaEmCasa
                     builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             });
             services.AddSwaggerGen();
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
+            var key = Encoding.ASCII.GetBytes(Configuration["AppSettings:Secret"]);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,9 +103,6 @@ namespace ComidaEmCasa
             app.UseRouting();
             app.UseAuthorization();
             app.UseAuthentication();
-            //app.UseAuthenticationMiddleware();
-            //app.UseHandleExceptionMiddleware();
-            //app.UseGlobalExceptionHandler(loggerFactory);
 
             app.UseEndpoints(endpoints =>
             {
