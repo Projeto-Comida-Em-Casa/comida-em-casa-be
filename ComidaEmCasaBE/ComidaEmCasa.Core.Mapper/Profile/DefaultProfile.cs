@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ComidaEmCasa.Model.Dto;
+using ComidaEmCasa.Model.DTO;
 using ComidaEmCasa.Model.Info;
 
 namespace ComidaEmCasa.Core.Mapper.MapperProfile
@@ -9,8 +9,10 @@ namespace ComidaEmCasa.Core.Mapper.MapperProfile
         public DefaultProfile()
         {
             //Usuario
-            CreateMap<UsuarioDTO, UsuarioInfo>().ReverseMap();
-            CreateMap<UsuarioInfo, UsuarioInfo>().ForMember(source => source.Id, config => config.Ignore());
+            CreateMap<UserDTO, UserInfo>().ReverseMap();
+            CreateMap<UserInfo, UserInfo>().ForMember(dest => dest.Id, config => config.Ignore());
+            CreateMap<CreateUserDTO, UserInfo>().ForMember(dest => dest.Password, config => config.Ignore());
+            CreateMap<UpdateUserDTO, UserInfo>().ForMember(dest => dest.Id, config => config.Ignore());
         }
     }
 }

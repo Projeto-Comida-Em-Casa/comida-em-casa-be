@@ -2,7 +2,7 @@
 
 namespace ComidaEmCasa.Core.Repository.Interface
 {
-    public interface IUsuarioRepository : IRepositoryBase<UsuarioInfo>
+    public interface IUsuarioRepository : IRepositoryBase<UserInfo>
     {
     }
 }

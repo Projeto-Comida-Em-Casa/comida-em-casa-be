@@ -1,9 +1,12 @@
-﻿namespace ComidaEmCasa.Model.Dto
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ComidaEmCasa.Model.Info
 {
-    public class UsuarioDTO
+    public class UserInfo : BaseInfo
     {
-        public int Id { get; set; }
         public string Name { get; set; }
+        public string Surname { get; set; }
         public string Cpf { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }

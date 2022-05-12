@@ -4,6 +4,6 @@ namespace ComidaEmCasa.Core.Services.Interface
 {
     public interface ITokenService
     {
-        string GenerateToken(UsuarioInfo user);
+        string GenerateToken(UserInfo user);
     }
 }
