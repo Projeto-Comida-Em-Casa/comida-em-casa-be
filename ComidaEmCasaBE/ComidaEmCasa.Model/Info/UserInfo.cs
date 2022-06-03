@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace ComidaEmCasa.Model.Info
+﻿namespace ComidaEmCasa.Model.Info
 {
     public class UserInfo : BaseInfo
     {
@@ -11,5 +8,6 @@ namespace ComidaEmCasa.Model.Info
         public string Email { get; set; }
         public string Password { get; set; }
         public string Cellphone { get; set; }
+        public InstituteInfo Institute { get; set; }
     }
 }

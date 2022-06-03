@@ -13,6 +13,10 @@ namespace ComidaEmCasa.Core.Mapper.MapperProfile
             CreateMap<UserInfo, UserInfo>().ForMember(dest => dest.Id, config => config.Ignore());
             CreateMap<CreateUserDTO, UserInfo>().ForMember(dest => dest.Password, config => config.Ignore());
             CreateMap<UpdateUserDTO, UserInfo>().ForMember(dest => dest.Id, config => config.Ignore());
+
+            //Institute
+            CreateMap<InstituteDTO, InstituteInfo>().ReverseMap();
+            CreateMap<CreateInstituteDTO, InstituteInfo>().ReverseMap();
         }
     }
 }

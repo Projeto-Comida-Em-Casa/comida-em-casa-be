@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ComidaEmCasa.Core.Repository
 {
-    public class UsuarioRepository : AbstractRepositoryBase<UserInfo>, IUsuarioRepository
+    public class UserRepository : AbstractRepositoryBase<UserInfo>, IUsuarioRepository
     {
-        public UsuarioRepository(DbContext context) : base(context)
+        public UserRepository(DbContext context) : base(context)
         {
         }
     }

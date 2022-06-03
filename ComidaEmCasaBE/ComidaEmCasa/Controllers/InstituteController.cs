@@ -6,42 +6,36 @@ using System.Threading.Tasks;
 
 namespace ComidaEmCasa.Controllers
 {
-
-    [ApiController]
     [Route("api/[controller]")]
-    public class UserController : BaseController
+    [ApiController]
+    public class InstituteController : BaseController
     {
-        public UserController(IUserService usuarioService) : base(usuarioService)
+        private readonly IInstituteService _InstituteService;
+        public InstituteController(IInstituteService instituteService, IUserService usuarioService) : base(usuarioService)
         {
+            _InstituteService = instituteService;
         }
 
         [HttpGet]
-        [Authorize]
+        [AllowAnonymous]
         public async Task<IActionResult> Get()
         {
-            var result = await _userService.Get(GetUserEmail());
+            var result = await _InstituteService.List();
             if (result.Success)
                 return Ok(result.Value);
             else
                 return UnprocessableEntity(result.ExCode.ToErrorObj());
         }
-
-
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CreateUserDTO createUserDTO)
+        [Authorize]
+        public async Task<IActionResult> Post(CreateInstituteDTO createInstituteDTO)
         {
-            var result = await _userService.CreateUser(createUserDTO);
+            var result = await _InstituteService.CreateInstitute(createInstituteDTO, GetUser().Result.Id);
             if (result.Success)
                 return Ok(result.Value);
             else
                 return UnprocessableEntity(result.ExCode.ToErrorObj());
-        }
-
-        [HttpPut]
-        public async Task<IActionResult> Put([FromBody] object updateUserDTO)
-        {
-            return null;
         }
     }
 }
