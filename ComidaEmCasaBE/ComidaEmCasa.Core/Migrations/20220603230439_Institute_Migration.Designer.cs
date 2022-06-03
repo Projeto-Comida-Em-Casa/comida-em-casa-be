@@ -2,14 +2,16 @@
 using ComidaEmCasa.Core.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ComidaEmCasa.Core.Migrations
 {
     [DbContext(typeof(ComidaEmCasaContext))]
-    partial class ComidaEmCasaContextModelSnapshot : ModelSnapshot
+    [Migration("20220603230439_Institute_Migration")]
+    partial class Institute_Migration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

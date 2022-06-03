@@ -132,7 +132,7 @@ namespace ComidaEmCasa
 
             app.UseRouting();
             app.UseAuthentication();
-            app.UseAuthorization();            
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -151,12 +151,14 @@ namespace ComidaEmCasa
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IInstituteService, InstituteService>();
 
         }
 
         internal void RegisterRepository(IServiceCollection services)
         {
-            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            services.AddScoped<IUsuarioRepository, UserRepository>();
+            services.AddScoped<IInstituteRepository, InstituteRepository>();
         }
     }
 }

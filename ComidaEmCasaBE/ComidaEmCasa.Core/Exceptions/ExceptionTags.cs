@@ -11,6 +11,8 @@ namespace ComidaEmCasa.Core.Exceptions
         [Description("CPF already exists")]
         CPF_ALREADY_EXISTS = 3,
         [Description("Invalid email or password")]
-        INVALID_EMAIL_OR_PASSWORD = 4
+        INVALID_EMAIL_OR_PASSWORD = 4,
+        [Description("User ALready has an institute")]
+        USER_ALREADY_HAS_INSTITUTE = 5
     }
 }
